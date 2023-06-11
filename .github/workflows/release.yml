@@ -1,0 +1,39 @@
+name: Create release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up MSVC environment
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Set up vcpkg
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg.exe integrate install
+
+      - name: Install dependencies (vspkg.json)
+        run: .\vcpkg\vcpkg.exe install
+
+      - name: Build executable
+        run: |
+          MSBuild.exe .\QueryDisplayScaling\QueryDisplayScaling.sln -p:Configuration=Release
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          files: ./QueryDisplayScaling/x64/Release/QueryDisplayScaling.exe
