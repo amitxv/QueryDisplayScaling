@@ -7,7 +7,7 @@
 int main() {
     std::string version = "0.1.0";
 
-    args::ArgumentParser parser("QueryDisplayScaling " + version + "\nGitHub - https://github.com/amitxv");
+    args::ArgumentParser parser("QueryDisplayScaling Version " + version + "\nCopyright (C) github.com/amitxv. All rights reserved.\n");
     args::HelpFlag help(parser, "help", "display this help menu", { "help" });
 
     std::vector<DISPLAYCONFIG_PATH_INFO> paths;
