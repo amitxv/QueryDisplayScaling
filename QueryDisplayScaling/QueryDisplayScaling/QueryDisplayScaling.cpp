@@ -4,11 +4,26 @@
 #include <vector>
 #include <windows.h>
 
-int main() {
+int main(int argc, char** argv) {
     std::string version = "0.1.0";
 
-    args::ArgumentParser parser("QueryDisplayScaling Version " + version + "\nCopyright (C) github.com/amitxv. All rights reserved.\n");
+    args::ArgumentParser parser("QueryDisplayScaling Version " + version + " - GPLv3\nGitHub - https://github.com/amitxv\n");
     args::HelpFlag help(parser, "help", "display this help menu", { "help" });
+
+    try {
+        parser.ParseCLI(argc, argv);
+    } catch (args::Help) {
+        std::cout << parser;
+        return 0;
+    } catch (args::ParseError e) {
+        std::cerr << e.what();
+        std::cerr << parser;
+        return 1;
+    } catch (args::ValidationError e) {
+        std::cerr << e.what();
+        std::cerr << parser;
+        return 1;
+    }
 
     std::vector<DISPLAYCONFIG_PATH_INFO> paths;
     std::vector<DISPLAYCONFIG_MODE_INFO> modes;
