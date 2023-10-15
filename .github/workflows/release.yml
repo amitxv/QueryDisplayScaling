@@ -28,8 +28,7 @@ jobs:
         run: .\vcpkg\vcpkg.exe install
 
       - name: Build executable
-        run: |
-          MSBuild.exe .\QueryDisplayScaling\QueryDisplayScaling.sln -p:Configuration=Release -p:Platform=x64
+        run: MSBuild.exe .\QueryDisplayScaling\QueryDisplayScaling.sln -p:Configuration=Release -p:Platform=x64
 
       - name: Upload to release
         uses: softprops/action-gh-release@v1
