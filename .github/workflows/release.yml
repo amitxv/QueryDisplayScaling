@@ -1,8 +1,11 @@
 name: Create release
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version of the program to build. This will be used for the tag and release name."
+        required: true
 
 jobs:
   build:
@@ -30,7 +33,10 @@ jobs:
       - name: Build executable
         run: MSBuild.exe .\QueryDisplayScaling\QueryDisplayScaling.sln -p:Configuration=Release -p:Platform=x64
 
-      - name: Upload to release
-        uses: softprops/action-gh-release@v1
+      - name: Create release
+        uses: ncipollo/release-action@v1
         with:
-          files: ./QueryDisplayScaling/x64/Release/QueryDisplayScaling.exe
+          tag: ${{ inputs.version }}
+          name: ${{ inputs.version }}
+          artifacts: ./QueryDisplayScaling/x64/Release/QueryDisplayScaling.exe
+          generateReleaseNotes: true
